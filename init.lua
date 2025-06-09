@@ -12,6 +12,13 @@ vim.api.nvim_create_autocmd({ "VimLeave", "VimSuspend" }, {
 	end,
 })
 
+vim.cmd([[
+  augroup highlight_yank
+      autocmd!
+      au TextYankPost * silent! lua vim.highlight.on_yank{ higroup="IncSearch", timeout=300 }
+  augroup END
+]])
+
 -- Set space as leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
