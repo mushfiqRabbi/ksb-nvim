@@ -1,3 +1,23 @@
+-- Set space as leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Options
+-- Use system clipboard unless in an SSH session.
+-- When running locally, set clipboard to 'unnamedplus' to enable integration with the OS clipboard.
+-- When connected via SSH (where system clipboard access is usually unavailable), disable clipboard sync to avoid errors.
+vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
+vim.opt.linebreak = true
+
+-- Commands
+vim.cmd([[
+  augroup highlight_yank
+      autocmd!
+      au TextYankPost * silent! lua vim.highlight.on_yank{ higroup="IncSearch", timeout=300 }
+  augroup END
+]])
+
+-- Auto commands
 vim.api.nvim_create_autocmd({ "VimEnter", "VimResume" }, {
 	group = vim.api.nvim_create_augroup("KittySetVarVimEnter", { clear = true }),
 	callback = function()
@@ -11,22 +31,6 @@ vim.api.nvim_create_autocmd({ "VimLeave", "VimSuspend" }, {
 		io.stdout:write("\x1b]1337;SetUserVar=in_ksb\007")
 	end,
 })
-
-vim.cmd([[
-  augroup highlight_yank
-      autocmd!
-      au TextYankPost * silent! lua vim.highlight.on_yank{ higroup="IncSearch", timeout=300 }
-  augroup END
-]])
-
--- Set space as leader key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- Use system clipboard unless in an SSH session.
--- When running locally, set clipboard to 'unnamedplus' to enable integration with the OS clipboard.
--- When connected via SSH (where system clipboard access is usually unavailable), disable clipboard sync to avoid errors.
-vim.opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 ---@diagnostic disable-next-line: undefined-field
